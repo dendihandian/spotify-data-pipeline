@@ -89,7 +89,7 @@ x-airflow-common:
 
 services:
   postgres:
-    image: postgres:13
+    image: postgres:13.11-alpine3.18
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
@@ -104,7 +104,7 @@ services:
     restart: always
 
   redis:
-    image: redis:latest
+    image: redis:7.0.11-alpine3.18
     expose:
       - 6379
     healthcheck:
