@@ -2,6 +2,7 @@ version: '3.8'
 
 volumes:
   postgres-db-volume:
+  redis-volume:
 
 services:
 
@@ -73,3 +74,36 @@ services:
       retries: 10
     depends_on:
       - postgres
+
+######################################################
+# REDIS
+######################################################
+
+  redis:
+    build:
+      context: ./docker/redis
+      dockerfile: ./Dockerfile
+    command: --requirepass redis
+    volumes:
+        - redis-volume:/data
+    ports:
+      - 6379:6379
+
+######################################################
+# PHPREDISADMIN (optional)
+######################################################
+
+  phpredisadmin:
+    build:
+      context: ./docker/phpredisadmin
+      dockerfile: ./Dockerfile
+    environment:
+      - ADMIN_USER=redis
+      - ADMIN_PASS=redis
+      - REDIS_1_HOST=redis
+      - REDIS_1_PORT=6379
+      - REDIS_1_AUTH=secret_redis
+    ports:
+      - 9987:80
+    depends_on:
+      - redis
