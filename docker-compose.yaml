@@ -19,6 +19,8 @@ services:
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
     volumes:
       - ./docker/airflow/dags:/opt/airflow/dags
     healthcheck:
@@ -83,7 +85,7 @@ services:
     build:
       context: ./docker/redis
       dockerfile: ./Dockerfile
-    command: --requirepass redis
+    command: --requirepass ${REDIS_AUTH}
     volumes:
         - redis-volume:/data
     ports:
@@ -98,11 +100,11 @@ services:
       context: ./docker/phpredisadmin
       dockerfile: ./Dockerfile
     environment:
-      - ADMIN_USER=redis
-      - ADMIN_PASS=redis
+      - ADMIN_USER=${PHPREDISADMIN_USER}
+      - ADMIN_PASS=${PHPREDISADMIN_PASS}
       - REDIS_1_HOST=redis
       - REDIS_1_PORT=6379
-      - REDIS_1_AUTH=secret_redis
+      - REDIS_1_AUTH=${REDIS_AUTH}
     ports:
       - 9987:80
     depends_on:
