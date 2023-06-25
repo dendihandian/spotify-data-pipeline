@@ -21,6 +21,7 @@ services:
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
       - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
       - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
+      - REDIS_PASS=${REDIS_AUTH}
     volumes:
       - ./docker/airflow/dags:/opt/airflow/dags
     healthcheck:

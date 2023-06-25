@@ -1,5 +1,7 @@
+from os import getenv
+
 REDIS_CONFIG = {
-    'host': 'redis',
-    'port': '6379',
-    'pass': 'redis',
+    'host': getenv('REDIS_HOST', 'redis'),
+    'port': getenv('REDIS_PORT', 6379),
+    'pass': getenv('REDIS_PASS', None),
 }
