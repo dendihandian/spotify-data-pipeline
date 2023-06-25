@@ -1,7 +1,8 @@
-from airflow.decorators import task
 from _utils.redis.test_connection import ping
 from _utils.spotify.test_connection import refresh_token
+from _utils.spotify.client import search_for_playlists
 from airflow import AirflowException
+from airflow.decorators import task
 
 @task
 def redis_test_connection():
@@ -16,3 +17,9 @@ def spotify_test_connection():
         print('spotify_connected')
     else:
         raise AirflowException('spotify_disconnected')
+
+@task
+def search_and_store_playlist(q):
+    playlist = search_for_playlists(q)
+
+    print('playlist_len', len(playlist))
