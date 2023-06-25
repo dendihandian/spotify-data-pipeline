@@ -19,7 +19,7 @@ def request_access_token():
 
 def refresh_access_token():
 
-    response = refresh_access_token()
+    response = request_access_token()
 
     if (int(response.status_code) == 200):
 
