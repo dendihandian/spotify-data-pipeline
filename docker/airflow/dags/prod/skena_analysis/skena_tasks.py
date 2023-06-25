@@ -11,8 +11,6 @@ def search_and_store_playlist(q):
     skena_analysis = mongo['skena_analysis']
     raw_playlists = skena_analysis["raw_playlists"]
 
-    print('FYI skena_analysis.list_collection_names', skena_analysis.list_collection_names())
-
     playlists = search_for_playlists(q)
     print('FYI len(playlists)', len(playlists))
 
@@ -27,5 +25,9 @@ def search_and_store_playlist(q):
         print(f"FYI Upserted documents: {result.upserted_count}")
         print(f"FYI Modified documents: {result.modified_count}")
 
+        # TODO: push to xcom for transform task
+        # upserted_ids = upserted_ids.values()
+
     except BulkWriteError as bwe:
         pprint(bwe.details)
+
