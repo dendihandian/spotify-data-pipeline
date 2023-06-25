@@ -1,6 +1,6 @@
 from datetime import datetime
 from airflow import DAG
-from prod._include.tasks.common_tasks import redis_test_connection, spotify_test_connection
+from prod._include.tasks.common_tasks import redis_test_connection, spotify_test_connection, mongo_test_connection
 from airflow.decorators import task
 
 now = datetime.now()
@@ -13,8 +13,9 @@ with DAG('test_connection_dag', default_args=default_args, schedule_interval='@d
 
     redis_test      = redis_test_connection.override(task_id='redis_test')()
     spotify_test    = spotify_test_connection.override(task_id='spotify_test')()
+    mongo_test      = mongo_test_connection.override(task_id='mongo_test')()
 
-    redis_test >> spotify_test
+    redis_test >> spotify_test >> mongo_test
 
 
 """

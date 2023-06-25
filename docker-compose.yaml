@@ -3,6 +3,8 @@ version: '3.8'
 volumes:
   postgres-db-volume:
   redis-volume:
+  mongo-volume-db:
+  mongo-volume-configdb:
 
 services:
 
@@ -22,6 +24,8 @@ services:
       - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
       - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
       - REDIS_PASS=${REDIS_AUTH}
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASS=${MONGO_PASS}
     volumes:
       - ./docker/airflow/dags:/opt/airflow/dags
     healthcheck:
@@ -49,7 +53,6 @@ services:
       interval: 10s
       retries: 5
       start_period: 5s
-    restart: always
 
 ######################################################
 # ADMINER (optional)
@@ -110,3 +113,29 @@ services:
       - 9987:80
     depends_on:
       - redis
+
+######################################################
+# MONGO
+######################################################
+
+  mongo:
+    build:
+      context: ./docker/mongo
+      dockerfile: ./Dockerfile
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
+    volumes:
+      - mongo-volume-db:/data/db
+      - mongo-volume-configdb:/data/configdb
+
+######################################################
+# MONGO-CLIENT (optional)
+######################################################
+
+  mongodb-php-gui:
+    build:
+      context: ./docker/mongodb-php-gui
+      dockerfile: ./Dockerfile
+    ports:
+      - 5000:5000

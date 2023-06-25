@@ -1,6 +1,6 @@
 FROM apache/airflow:slim-2.6.1-python3.10
 
-RUN pip install psycopg2-binary spotipy
+RUN pip install psycopg2-binary spotipy pymongo
 
 COPY dags /opt/airflow/dags
 COPY entrypoint.sh entrypoint.sh

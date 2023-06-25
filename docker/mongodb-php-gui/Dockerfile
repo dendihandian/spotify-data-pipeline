@@ -1,0 +1,1 @@
+FROM samueltallet/mongodb-php-gui:latest

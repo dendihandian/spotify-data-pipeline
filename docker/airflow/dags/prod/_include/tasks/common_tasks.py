@@ -1,6 +1,6 @@
 from _utils.redis.test_connection import ping
 from _utils.spotify.test_connection import refresh_token
-from _utils.spotify.client import search_for_playlists
+from _utils.mongo.test_connection import get_test_database
 from airflow import AirflowException
 from airflow.decorators import task
 
@@ -19,7 +19,8 @@ def spotify_test_connection():
         raise AirflowException('spotify_disconnected')
 
 @task
-def search_and_store_playlist(q):
-    playlist = search_for_playlists(q)
-
-    print('playlist_len', len(playlist))
+def mongo_test_connection():
+    if (get_test_database()):
+        print('mongo_connected')
+    else:
+        raise AirflowException('mongo_disconnected')
