@@ -6,7 +6,7 @@ from pymongo.errors import BulkWriteError
 import pprint
 
 @task
-def search_and_store_playlist(q):
+def ingest_playlists(q):
 
     skena_analysis = mongo['skena_analysis']
     raw_playlists = skena_analysis["raw_playlists"]
@@ -17,7 +17,8 @@ def search_and_store_playlist(q):
     for index, playlist in enumerate(playlists):
         playlists[index]['_id'] = playlist['id']
 
-    upsert_requests = [UpdateOne({'_id': playlist['_id']}, {'$set':playlist}, upsert=True) for playlist in playlists]
+    upsert_requests = [UpdateOne({'_id': playlist['_id']}, {'$set': playlist}, upsert=True) for playlist in playlists]
+    playlists_ids = [playlist['_id'] for playlist in playlists]
 
     try:
 
@@ -25,9 +26,14 @@ def search_and_store_playlist(q):
         print(f"FYI Upserted documents: {result.upserted_count}")
         print(f"FYI Modified documents: {result.modified_count}")
 
-        # TODO: push to xcom for transform task
-        # upserted_ids = upserted_ids.values()
-
     except BulkWriteError as bwe:
         pprint(bwe.details)
 
+    return playlists_ids
+
+@task
+def get_tracks_from_playlists(playlist_ids):
+
+    if len(playlist_ids) > 0:
+
+        print('FYI playlist_ids', playlist_ids)

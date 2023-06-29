@@ -1,10 +1,10 @@
 # Spotify Data Pipeline
 
-NOTE: This is a showcase portfolio project and not mean for production.
+NOTE: This is a showcase portfolio project and not meant for production.
 
 ## Requirement
 
-### 
+### General Requirement
 
 - Spotify Account and Spotify Developer Application Account
 

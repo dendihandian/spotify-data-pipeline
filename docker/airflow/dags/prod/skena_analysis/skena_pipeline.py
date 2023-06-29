@@ -1,6 +1,6 @@
 from datetime import datetime
 from airflow import DAG
-from prod.skena_analysis.skena_tasks import search_and_store_playlist
+from prod.skena_analysis.skena_tasks import ingest_playlists, get_tracks_from_playlists
 
 now = datetime.now()
 
@@ -10,4 +10,4 @@ default_args = {
 
 with DAG('skena_pipeline', default_args=default_args, schedule_interval='@daily') as dag:
 
-    ingest_playlists = search_and_store_playlist.override(task_id='ingest_playlists')('skena')
+    get_tracks_from_playlists(ingest_playlists('skena'))
